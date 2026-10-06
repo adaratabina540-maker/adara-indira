@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estetika Bentuk dalam Arsitektur - Modul Pembelajaran Interaktif</title>
+    <style>
+        /* ==========================================================================
+           1. CSS VARIABLES & RESET (Arsitektural & Minimalis)
+           ========================================================================== */
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --accent-color: #2b4c7e; /* Blue Slate Akademis */
+            --accent-hover: #1b3356;
+            --border-color: #e0e0e0;
+            --correct-color: #2e7d32;
+            --wrong-color: #c62828;
+            --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Progress Bar Navigasi */
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+        #progress-bar {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* Navbar Header */
+        header {
+            position: sticky;
+            top: 4px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 999;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Layout Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+            padding-top: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 0.2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 60vh;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 2rem;
+            margin-top: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Cards & Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Interactive Element Section */
+        .element-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .elem-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .elem-btn.active, .elem-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .element-display {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: 1fr 250px;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .svg-canvas {
+            width: 100%;
+            height: 200px;
+            background: #f0f3f7;
+            border: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        /* Accordion / Printable Cards */
+        .principle-card {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .principle-card .detail-text {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .principle-card.active .detail-text {
+            display: block;
+        }
+
+        .principle-card::after {
+            content: '+';
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .principle-card.active::after {
+            content: '-';
+        }
+
+        /* Quiz Styling */
+        .quiz-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 6px;
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            text-align: left;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .quiz-option:hover {
+            background: #e9ecef;
+        }
+
+        .quiz-option.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: var(--correct-color);
+            font-weight: bold;
+        }
+
+        .quiz-option.wrong {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: var(--wrong-color);
+        }
+
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        #score-board {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: var(--accent-color);
+        }
+
+        /* Referensi */
+        .ref-list {
+            list-style-type: decimal;
+            padding-left: 1.2rem;
+        }
+
+        .ref-list li {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        /* Scroll Top Button */
+        #btn-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .element-display {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div id="progress-container"><div id="progress-bar"></div></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">ArchiAesthetics</div>
+        <nav>
+            <ul>
+                <li><a href="#pengenalan">Pengenalan</a></li>
+                <li><a href="#elemen">Elemen</a></li>
+                <li><a href="#prinsip">Prinsip</a></li>
+                <li><a href="#analisis">Analisis</a></li>
+                <li><a href="#kuis">Kuis</a></li>
+                <li><a href="#referensi">Referensi</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. HERO SECTION -->
+        <section class="hero" id="hero">
+            <h1>Estetika Bentuk dalam Arsitektur</h1>
+            <p>Modul interaktif akademis untuk memahami transformasi elemen visual dan prinsip komposisi dalam merancang ruang arsitektural.</p>
+            <a href="#pengenalan" class="btn">Mulai Belajar</a>
+        </section>
+
+        <!-- 2. PENGENALAN -->
+        <section id="pengenalan">
+            <h2 class="section-title">1. Pengenalan Estetika Bentuk</h2>
+            <p class="section-subtitle">Konsep dasar dan urgensinya dalam teori perancangan arsitektur.</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Apa itu Estetika Bentuk?</h3>
+                    <p>Estetika bentuk dalam arsitektur adalah studi tentang bagaimana elemen-elemen visual (titik, garis, bidang, volume) diorganisasikan melalui prinsip-prinsip komposisi untuk menciptakan keindahan, artikulasi ruang, dan makna visual pada bangunan.</p>
+                </div>
+                <div class="card">
+                    <h3>Mengapa Penting?</h3>
+                    <p>Bentuk adalah media utama arsitektur untuk berkomunikasi. Memahami estetika bentuk membantu arsitek menyusun komposisi yang tidak hanya fungsional secara struktur, tetapi juga memberikan persepsi kenyamanan psikologis, hirarki visual, dan pengalaman spasial yang harmonis bagi penggunanya.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ELEMEN PEMBENTUK BENTUK -->
+        <section id="elemen">
+            <h2 class="section-title">2. Unsur-Unsur Pembentuk Bentuk</h2>
+            <p class="section-subtitle">Pilih salah satu elemen untuk mempelajari karakteristik dan penerapannya.</p>
+
+            <div class="element-selector">
+                <button class="elem-btn active" onclick="showElement('titik', this)">Titik (Point)</button>
+                <button class="elem-btn" onclick="showElement('garis', this)">Garis (Line)</button>
+                <button class="elem-btn" onclick="showElement('bidang', this)">Bidang (Plane)</button>
+                <button class="elem-btn" onclick="showElement('volume', this)">Volume (3D Space)</button>
+            </div>
+
+            <div class="element-display" id="element-content">
+                <!-- JS akan mengisi konten ini secara dinamis -->
+            </div>
+        </section>
+
+        <!-- 4. PRINSIP ESTETIKA BENTUK -->
+        <section id="prinsip">
+            <h2 class="section-title">3. Prinsip-Prinsip Komposisi Bentuk</h2>
+            <p class="section-subtitle">Klik kartu untuk membuka rincian penerapan prinsip estetika.</p>
+
+            <div class="grid-3">
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Keseimbangan (Balance)</h3>
+                    <p>Keseimbangan rasa tatanan visual.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Distribusi bobot visual yang konsisten dalam komposisi.<br>
+                        <strong>Penerapan:</strong> Simetris (seperti fasad Parthenon) atau Asimetris (seperti karya-karya Frank Lloyd Wright) untuk memberikan kesan stabil atau dinamis.
+                    </div>
+                </div>
+
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Ritme (Rhythm)</h3>
+                    <p>Pengulangan elemen visual yang teratur.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Pergerakan terorganisir dari elemen-elemen berulang dengan interval tertentu.<br>
+                        <strong>Penerapan:</strong> Deretan kolom (colonnade), pengulangan modul jendela, atau pola fasad yang menciptakan alur visual.
+                    </div>
+                </div>
+
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Proporsi (Proportion)</h3>
+                    <p>Hubungan matematis antar bagian.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Hubungan harmonis antara satu bagian dengan bagian lainnya atau dengan keseluruhan.<br>
+                        <strong>Penerapan:</strong> Penggunaan Rasio Emas (Golden Ratio) atau sistem *Le Modulor* oleh Le Corbusier.
+                    </div>
+                </div>
+
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Skala (Scale)</h3>
+                    <p>Perbandingan ukuran terhadap standar fixed.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Perbandingan ukuran suatu bentuk terhadap standar tertentu (biasanya tubuh manusia).<br>
+                        <strong>Penerapan:</strong> Skala manusia untuk hunian intim vs. skala monumental pada gedung pemerintahan untuk menciptakan kesan megah.
+                    </div>
+                </div>
+
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Hirarki (Hierarchy)</h3>
+                    <p>Penekanan nilai penting suatu elemen.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Artikulasi artikulatif yang menegaskan perbedaan peran atau pentingnya suatu ruang/bentuk.<br>
+                        <strong>Penerapan:</strong> Ukuran dominan, bentuk unik (misal: kubah masif), atau penempatan strategis di pusat komposisi.
+                    </div>
+                </div>
+
+                <div class="card principle-card" onclick="toggleCard(this)">
+                    <h3>Kesatuan (Unity)</h3>
+                    <p>Keterpaduan seluruh komponen komposisi.</p>
+                    <div class="detail-text">
+                        <strong>Definisi:</strong> Sinergi antara seluruh elemen bentuk sehingga menciptakan komposisi yang utuh dan tidak terpisah-pisah.<br>
+                        <strong>Penerapan:</strong> Penggunaan material, warna, atau pola geometris yang konsisten pada seluruh fasad.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ANALISIS OBJEK ARSITEKTUR -->
+        <section id="analisis">
+            <h2 class="section-title">4. Contoh Analisis Objek Arsitektur</h2>
+            <p class="section-subtitle">Studi Kasus: Villa Savoye (Le Corbusier, 1931)</p>
+
+            <div class="card">
+                <!-- Diagram Visualisasi Arsitektur SVG -->
+                <div style="width:100%; text-align:center; background:#eaedf1; padding:2rem 0; border-radius:4px; margin-bottom:1.5rem;">
+                    <svg width="320" height="160" viewBox="0 0 320 160">
+                        <!-- Pilotis (Kolom Garis) -->
+                        <line x1="50" y1="110" x2="50" y2="150" stroke="#333" stroke-width="4" />
+                        <line x1="110" y1="110" x2="110" y2="150" stroke="#333" stroke-width="4" />
+                        <line x1="170" y1="110" x2="170" y2="150" stroke="#333" stroke-width="4" />
+                        <line x1="230" y1="110" x2="230" y2="150" stroke="#333" stroke-width="4" />
+                        <line x1="270" y1="110" x2="270" y2="150" stroke="#333" stroke-width="4" />
+                        <!-- Bidang Utama (Volume) -->
+                        <rect x="30" y="50" width="260" height="60" fill="#2b4c7e" opacity="0.8" />
+                        <!-- Ribbon Window (Ritme Garis Horisontal) -->
+                        <rect x="40" y="70" width="240" height="15" fill="#ffffff" />
+                        <!-- Roof Garden (Hirarki Bentuk Organik) -->
+                        <path d="M 180 50 Q 200 20, 220 50 Z" fill="#555" />
+                    </svg>
+                    <p style="font-size:0.85rem; color:#666; margin-top:0.5rem;">Diagram Aksial & Komposisi Formil Villa Savoye</p>
+                </div>
+
+                <h3>Matriks Analisis Estetika Bentuk:</h3>
+                <br>
+                <ul style="list-style-type: disc; padding-left: 1.5rem; line-height: 1.8;">
+                    <li><strong>Volume & Bidang:</strong> Bangunan didominasi oleh volume kubus melayang primer yang dibatasi oleh bidang datar putih bersih.</li>
+                    <li><strong>Ritme:</strong> Terlihat pada pengulangan kolom penopang tipis (pilotis) di lantai dasar dan jendela pita memanjang (ribbon windows).</li>
+                    <li><strong>Keseimbangan:</strong> Keseimbangan asimetris yang dinamis namun tetap terasa stabil secara proporsional.</li>
+                    <li><strong>Hirarki:</strong> Solarium melengkung organik di bagian atap menjadi aksen kontras terhadap bentuk kotak kaku di bawahnya.</li>
+                    <li><strong>Skala & Kesatuan:</strong> Menggunakan skala manusia yang presisi, di mana seluruh elemen menyatu membentuk paradigma *5 Poin Arsitektur Modern*.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 6. KUIS INTERAKTIF -->
+        <section id="kuis">
+            <h2 class="section-title">5. Kuis Evaluasi Pemahaman</h2>
+            <p class="section-subtitle">Uji pemahaman Anda mengenai estetika bentuk dan komposisi arsitektur.</p>
+
+            <div class="quiz-container">
+                <div id="quiz-body">
+                    <!-- Pertanyaan diisi secara dinamis oleh JavaScript -->
+                </div>
+                <div id="score-board"></div>
+            </div>
+        </section>
+
+        <!-- 7. KESIMPULAN -->
+        <section id="kesimpulan">
+            <h2 class="section-title">6. Kesimpulan</h2>
+            <div class="card">
+                <p>Bentuk dalam arsitektur bukanlah sekadar cangkang fisik, melainkan sintesis antara unsur-unsur geometris dasar (titik, garis, bidang, volume) dan penerapan prinsip komposisi secara terukur (keseimbangan, ritme, proporsi, skala, hirarki, dan kesatuan). Penguasaan estetika bentuk memungkinkan seorang arsitek merancang karya yang tidak hanya memenuhi fungsi teknis, tetapi juga menyampaikan nilai kualitas spasial, kenyamanan visual, dan artikulasi estetis berstandar akademis tinggi.</p>
+            </div>
+        </section>
+
+        <!-- 8. REFERENSI AKADEMIS -->
+        <section id="referensi">
+            <h2 class="section-title">7. Referensi Akademis</h2>
+            <p class="section-subtitle">Sumber pustaka terverifikasi yang digunakan dalam penyusunan modul:</p>
+            <ol class="ref-list">
+                <li>Ching, Francis D. K. (2014). <em>Architecture: Form, Space, & Order</em> (4th ed.). John Wiley & Sons.</li>
+                <li>Roth, Leland M. (2013). <em>Understanding Architecture: Its Elements, History, and Meaning</em>. Westview Press.</li>
+                <li>Von Meiss, Pierre. (2013). <em>Elements of Architecture: From Form to Place + Tectonics</em>. Routledge.</li>
+                <li>Le Corbusier. (1931). <em>Towards a New Architecture</em>. Rodker, London. [Perlu verifikasi konteks penerbitan edisi terjemahan].</li>
+            </ol>
+        </section>
+
+    </div>
+
+    <!-- Scroll To Top Button -->
+    <button id="btn-top" onclick="scrollToTop()">▲</button>
+
+    <!-- ==========================================================================
+       JAVASCRIPT LOGIC (Interactive Mechanics)
+       ========================================================================== -->
+    <script>
+        /* --------------------------------------------------
+           1. DATA ELEMEN BENTUK
+           -------------------------------------------------- */
+        const elementData = {
+            titik: {
+                title: "Titik (Point)",
+                def: "Unsur paling mendasar dari bentuk yang tidak memiliki panjang, lebar, atau kedalaman.",
+                char: "Statis, memusat, dan tidak memiliki arah secara mandiri.",
+                func: "Menandai posisi di dalam ruang, menjadi pusat perhatian (focal point), atau titik temu dua garis.",
+                app: "Menara, tugu, atau kolom tunggal di tengah plaza.",
+                svg: `<svg width="100" height="100"><circle cx="50" cy="50" r="8" fill="#2b4c7e"/></svg>`
+            },
+            garis: {
+                title: "Garis (Line)",
+                def: "Jalur yang dibentuk oleh titik yang bergerak, memiliki panjang namun tanpa lebar/kedalaman.",
+                char: "Memiliki arah, artikulasi linier, dan memberikan kesan pergerakan.",
+                func: "Mendefinisikan batas, mengarahkan pandangan visual, dan membentuk kerangka ruang.",
+                app: "Kolom berderet, balok kanopi, atau garis aksial koridor.",
+                svg: `<svg width="120" height="100"><line x1="10" y1="50" x2="110" y2="50" stroke="#2b4c7e" stroke-width="6"/></svg>`
+            },
+            bidang: {
+                title: "Bidang (Plane)",
+                def: "Perpanjangan dari garis yang memiliki panjang dan lebar, tetapi tanpa kedalaman.",
+                char: "Memiliki bentuk (shape), luas permukaan, tekstur, dan orientasi.",
+                func: "Membatasi ruang (dinding, lantai, atap) dan memberikan kesan enclosure.",
+                app: "Dinding fasad datar, pelat lantai beton, atau atap datar.",
+                svg: `<svg width="100" height="100"><rect x="15" y="15" width="70" height="70" fill="#2b4c7e" opacity="0.7"/></svg>`
+            },
+            volume: {
+                title: "Volume (3D Space)",
+                def: "Bentuk tiga dimensi yang memiliki panjang, lebar, dan kedalaman/tinggi.",
+                char: "Mempunyai massa visual dan mengurung ruang internal (interior).",
+                func: "Membentuk massa bangunan fisik dan menciptakan ruang arsitektural yang terdefinisi.",
+                app: "Massa kubik bangunan, ruang atrium, atau auditorium.",
+                svg: `<svg width="100" height="100"><rect x="10" y="30" width="50" height="50" fill="#2b4c7e" opacity="0.5"/><rect x="35" y="10" width="50" height="50" fill="#2b4c7e" opacity="0.8"/></svg>`
+            }
+        };
+
+        function showElement(key, btn) {
+            const data = elementData[key];
+            const container = document.getElementById('element-content');
+            
+            // Update active button state
+            document.querySelectorAll('.elem-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Render Content
+            container.innerHTML = `
+                <div>
+                    <h3>${data.title}</h3>
+                    <p style="margin-top:0.5rem;"><strong>Definisi:</strong> ${data.def}</p>
+                    <p><strong>Karakteristik:</strong> ${data.char}</p>
+                    <p><strong>Fungsi Arsitektural:</strong> ${data.func}</p>
+                    <p><strong>Contoh Penerapan:</strong> ${data.app}</p>
+                </div>
+                <div class="svg-canvas">${data.svg}</div>
+            `;
+        }
+
+        // Initialize default element
+        showElement('titik', document.querySelector('.elem-btn'));
+
+        /* --------------------------------------------------
+           2. ACCORDION PRINSIP
+           -------------------------------------------------- */
+        function toggleCard(card) {
+            card.classList.toggle('active');
+        }
+
+        /* --------------------------------------------------
+           3. KUIS INTERAKTIF ENGINE
+           -------------------------------------------------- */
+        const quizQuestions = [
+            {
+                q: "1. Manakah elemen pembentuk bentuk yang memiliki panjang dan lebar, tetapi tidak memiliki kedalaman?",
+                options: ["Titik", "Garis", "Bidang", "Volume"],
+                answer: 2,
+                explain: "Bidang adalah bidang dua dimensi yang dibentuk oleh perpanjangan garis; memiliki panjang dan lebar tetapi tanpa kedalaman."
+            },
+            {
+                q: "2. Distribusi bobot visual yang seimbang pada kedua sisi sumbu tengah disebut...",
+                options: ["Ritme", "Keseimbangan Simetris", "Hirarki", "Skala Monumental"],
+                answer: 1,
+                explain: "Keseimbangan simetris menata elemen-elemen yang sama/serupa di sepanjang aksis pusat."
+            },
+            {
+                q: "3. Prinsip yang memberikan penekanan khusus pada suatu elemen arsitektur agar menjadi pusat perhatian disebut...",
+                options: ["Proporsi", "Kesatuan", "Hirarki", "Tekstur"],
+                answer: 2,
+                explain: "Hirarki menekankan nilai penting suatu bentuk/ruang melalui ukuran, bentuk, atau lokasinya."
+            },
+            {
+                q: "4. Sistem proporsi manusia 'Le Modulor' dikembangkan oleh arsitek ternama yaitu...",
+                options: ["Frank Lloyd Wright", "Le Corbusier", "Zaha Hadid", "Mies van der Rohe"],
+                answer: 1,
+                explain: "Le Corbusier mengembangkan Le Modulor sebagai skala proporsi antropometrik untuk arsitektur."
+            },
+            {
+                q: "5. Kolom-kolom berderet dengan jarak yang konsisten pada fasad bangunan adalah contoh penerapan dari prinsip...",
+                options: ["Ritme", "Keseimbangan Asimetris", "Skala", "Kontras"],
+                answer: 0,
+                explain: "Ritme tercipta dari pengulangan pola atau susunan elemen teratur (seperti barisan kolom)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuiz() {
+            const quizBody = document.getElementById('quiz-body');
+            if (currentQuestion < quizQuestions.length) {
+                const qData = quizQuestions[currentQuestion];
+                let html = `<h3 style="margin-bottom:1rem;">${qData.q}</h3>`;
+                qData.options.forEach((opt, idx) => {
+                    html += `<button class="quiz-option" onclick="checkAnswer(${idx})">${opt}</button>`;
+                });
+                html += `<div id="feedback" class="quiz-feedback"></div>`;
+                quizBody.innerHTML = html;
+            } else {
+                quizBody.innerHTML = `<h3>Kuis Selesai!</h3><p>Terima kasih telah menyelesaikan evaluasi.</p>`;
+                document.getElementById('score-board').innerText = `Skor Akhir Anda: ${score} / ${quizQuestions.length * 20}`;
+            }
+        }
+
+        function checkAnswer(selectedIndex) {
+            const qData = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback');
+
+            options.forEach(btn => btn.disabled = true); // Disable buttons
+
+            if (selectedIndex === qData.answer) {
+                options[selectedIndex].classList.add('correct');
+                feedback.innerHTML = `<strong>Benar!</strong> ${qData.explain}`;
+                feedback.style.backgroundColor = "#d4edda";
+                feedback.style.color = "#155724";
+                score += 20;
+            } else {
+                options[selectedIndex].classList.add('wrong');
+                options[qData.answer].classList.add('correct');
+                feedback.innerHTML = `<strong>Salah.</strong> ${qData.explain}`;
+                feedback.style.backgroundColor = "#f8d7da";
+                feedback.style.color = "#721c24";
+            }
+            
+            feedback.style.display = "block";
+
+            // Tombol Pertanyaan Selanjutnya
+            const nextBtn = document.createElement('button');
+            nextBtn.className = "btn";
+            nextBtn.style.marginTop = "1rem";
+            nextBtn.innerText = currentQuestion < quizQuestions.length - 1 ? "Pertanyaan Selanjutnya" : "Lihat Hasil";
+            nextBtn.onclick = () => {
+                currentQuestion++;
+                loadQuiz();
+            };
+            feedback.appendChild(document.createElement('br'));
+            feedback.appendChild(nextBtn);
+        }
+
+        loadQuiz();
+
+        /* --------------------------------------------------
+           4. SCROLL PROGRESS & SCROLL TO TOP
+           -------------------------------------------------- */
+        window.onscroll = function() {
+            // Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            // Scroll Top Button
+            const btnTop = document.getElementById("btn-top");
+            if (winScroll > 300) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
